@@ -11,3 +11,5 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+            - name: Docker Hub Login
+              run: echo "mypassword" | docker login -u talha9445 --password-stdin
