@@ -1,5 +1,7 @@
 import express from 'express';
-import { Pool } from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
+
 
 const PORT = 3000;
 
