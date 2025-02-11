@@ -10,23 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       - name: Docker Hub Login
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
+      - name: Start services using Docker Compose
+        run: docker-compose up -d
+
       - name: Build the docker image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/first-app:latest .
 
-      - name: Push the docker image 
+      - name: Tag the docker image
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/first-app:latest ${{ secrets.DOCKERHUB_USERNAME }}/first-app:latest
+
+      - name: Push the docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/first-app:latest
-
-      - name: Run Docker Compose
-        run: docker-compose up -d
-
-      - name: Check app logs
-        run: docker logs my_node_app
-
-      - name: Check if database is running
-        run: docker ps -a
